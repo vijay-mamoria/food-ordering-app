@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Controller from '../src/screens/Controller';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <div>
-        Food Ordering App
-    </div>,
+    <Controller />,
     document.getElementById('root')
 );
 
