@@ -16,8 +16,8 @@ class Controller extends Component {
             <Router>
                 <div>
                     <Route path='/' render={(props) => <Home {...props} />} />
-                    <Route path='/checkout' render={(props) => <Checkout {...props} />} />
                     <Route path='/details' render={(props) => <Details {...props} />} />
+                    <Route path='/checkout' render={(props) => <Checkout {...props} />} />
                 </div>
             </Router>
         )

@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import Header from '../../common/header/Header';
 import './Home.css';
 
 class Home extends Component {
@@ -6,7 +7,7 @@ class Home extends Component {
         return (
             <div className="Home-bg">
                 <div className="Home-logo">
-                    Food Ordering App
+                    <Header />
                 </div>
             </div>
         )
