@@ -33,6 +33,10 @@
     float: right;
 }
 
+.tabs {
+    margin-bottom: 20px;
+}
+
 .disp-none{
     display: none;
 }
@@ -41,4 +45,8 @@
     display: block;
     border-radius: 4px;
     background-color: #c0c0c0;
+}
+
+.red {
+    color: red;
 }
