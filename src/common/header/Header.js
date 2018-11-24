@@ -47,7 +47,7 @@ class Header extends Component {
         this.state = {
             loggedIn: true,
             userData: "",
-            displayMenu: "disp-block",
+            displayMenu: false,
             isModalOpen: false,//Modal State
             value: 1,//Tab Value
             //Login Tab Fields
@@ -121,7 +121,7 @@ class Header extends Component {
     /**
      * Clear Session Storage on Logout.
      */
-    onLogoutClickHandler = () => {
+    logoutClickHandler = () => {
         sessionStorage.removeItem("uuid");
         sessionStorage.removeItem("access-token");
         this.setState({
@@ -221,45 +221,61 @@ class Header extends Component {
         xhrSignup.send(dataSignup);
     }
 
+    showMenu = () => {
+        this.setState({ displayMenu: true });
+    }
+
+    hideMenu = () => {
+        this.setState({ displayMenu: false });
+    }
+
     render() {
         return (
             <div >
                 <div>
-
                     <header className="header-bg">
                         <div className="header-logo">
                             {/** Application Icon*/}
                             <Fastfood className="searchIcon" />
                         </div>
-                    </header>
-
-                    <div>
-                        <div className="right">
-                            <div className="searchBox">
-                                {/** Search Bar*/}
-                                <Search className="searchIcon" />
-                                <Input id="search" type="text" placeholder="Search by Restaurant Name" onChange={this.inputSearchChangeHandler}>
-                                </Input>
-                            </div>
-                            <div className="profile-picture">
-                                {/** Login Button*/}
-                                <Button variant="contained" color="default" onClick={this.openModalHandler}>
-                                    <AccountCircle /> LOGIN
+                        <div>
+                            <div className="right">
+                                <div className="searchBox">
+                                    {/** Search Bar*/}
+                                    <Search className="searchIcon" />
+                                    <Input id="search" type="text" placeholder="Search by Restaurant Name" onChange={this.inputSearchChangeHandler}>
+                                    </Input>
+                                </div>
+                                <div className="profile-picture">
+                                    {/** Login Button*/}
+                                    <Button variant="contained" color="default" onClick={this.openModalHandler}>
+                                        <AccountCircle /> LOGIN
                                     </Button>
-                                <div className={this.state.displayMenu}>
-                                    <Menu id="simple-menu" open={false}>
-                                        {/**Check if this onclick method executing then remove Link Tag */}
-                                        <MenuItem key="1" onClick={this.myAccountClickHandler}>
-                                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">My Account</Link>
-                                        </MenuItem>
-                                        <MenuItem key="2" onClick={this.logoutClickHandler}>
-                                            <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">Logout</Link>
-                                        </MenuItem>
-                                    </Menu>
+                                    <span>
+                                        <span>
+                                            {/** User Profile Button*/}
+                                            <Button variant="contained" color="default"
+                                                aria-owns={this.state.displayMenu ? 'simple-menu' : undefined}
+                                                aria-haspopup="true"
+                                                onClick={this.showMenu}>
+                                                <AccountCircle /> FirstName
+                                            </Button>
+                                            {/** Menu for Logged in User*/}
+                                            <Menu id="simple-menu" open={this.state.displayMenu} onClose={this.hideMenu}>
+                                                {/**Check if this onclick method executing then remove Link Tag */}
+                                                <MenuItem key="1" onClick={this.myAccountClickHandler}>
+                                                    My Profile
+                                                </MenuItem>
+                                                <MenuItem key="2" onClick={this.logoutClickHandler}>
+                                                    Logout
+                                                </MenuItem>
+                                            </Menu>
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </header>
 
                     {/** Modal Login and Register*/}
                     <Modal
