@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import Step from '@material-ui/core/Step';
+import StepContent from '@material-ui/core/StepContent';
+import StepLabel from '@material-ui/core/StepLabel';
+import Stepper from '@material-ui/core/Stepper';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Checkout.css';
 
@@ -24,6 +29,9 @@ const styles = theme => ({
     },
     resetContainer: {
         padding: theme.spacing.unit * 3,
+    },
+    snackbar: {
+        margin: theme.spacing.unit,
     },
 });
 
@@ -54,9 +62,18 @@ class Checkout extends Component {
     constructor() {
         super();
         this.state = {
-            activeStep: 0
+            activeStep: 0,
+            //Snackbar Message Item
+            open: false,
+            vertical: 'top',
+            horizontal: 'center',
+            placeOrderNotificationMessage: '',
         }
     }
+
+    /**
+     * Vertical Stepper Functions
+     */
 
     handleNext = () => {
         this.setState(state => ({
@@ -76,10 +93,29 @@ class Checkout extends Component {
         });
     };
 
+    /**
+     * Summary Details Functions
+     */
+    placeOrderClickHandler = () => {
+        {/**API to place Order*/ }
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    restaurantDetails: JSON.parse(this.responseText)
+                });
+            }
+        });
+        xhr.open("GET", "http://localhost:8080/api/order");
+        xhr.send();
+    }
+
     render() {
         const { classes } = this.props;
         const steps = getSteps();
         const { activeStep } = this.state;
+        const { vertical, horizontal, open } = this.state;
         return (
             <div>
                 <Header />
@@ -128,6 +164,23 @@ class Checkout extends Component {
                         </div>
                     </div>
                     <div className="summary">
+                        <Card>
+                            <CardHeader>Summary</CardHeader>
+                            <CardContent>
+                                <Divider />
+                                Net Amount
+                                <Button variant="contained" color="primary" onClick={this.placeOrderClickHandler}>PLACE ORDER</Button>
+                                <Snackbar
+                                    anchorOrigin={{ vertical, horizontal }}
+                                    open={open}
+                                    onClose={this.handleClose}
+                                    ContentProps={{
+                                        'aria-describedby': 'message-id',
+                                    }}
+                                    message={<span id="message-id">{this.state.placeOrderNotificationMessage}</span>}
+                                />
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
             </div>
