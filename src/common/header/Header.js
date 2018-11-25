@@ -14,7 +14,6 @@ import Search from '@material-ui/icons/Search';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { Link } from 'react-router-dom';
 import './Header.css';
 
 const customStyles = {

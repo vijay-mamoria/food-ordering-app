@@ -1,4 +1,4 @@
-import { FormControl, GridListTile, Input, InputLabel, Typography } from '@material-ui/core';
+import { GridListTile, Typography } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import GridList from '@material-ui/core/GridList';
@@ -130,8 +130,8 @@ class Home extends Component {
     //     this.setState({ userImages: userImageLikes })
     // }
 
-    showRestaurantDetails = () => {
-
+    showRestaurantDetails = (restaurantId) => {
+        this.props.history.push("/details/" + restaurantId);
     }
 
     render() {
@@ -141,11 +141,12 @@ class Home extends Component {
                 <Header />
                 <div className="main-body-container">
                     <GridList cellHeight={"auto"} className={classes.gridListMain} cols={2}>
+                        {/**Check implementation of onClick for GridListTile. If we directly write method name then it executes immediately*/}
                         {this.state.restaurants.map(restaurant => (
-                            <GridListTile onClick="this.showRestaurantDetails">
+                            <GridListTile onClick={() => this.showRestaurantDetails(restaurant.id)}>
                                 <Card key={restaurant.id} className="image-post">
                                     <CardContent>
-                                        <img src={restaurant.photoUrl} alt="Restaurant_Image" />
+                                        <img src={restaurant.photoUrl} alt="RestaurantImage" />
                                         <Typography>
                                             <p>{restaurant.restaurantName}</p>
                                             <p>{restaurant.categories}</p>

@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import Header from '../../common/header/Header';
 import './Checkout.css';
 
 class Checkout extends Component {
     render() {
         return (
-            <div className="Checkout-bg">
-                <div className="Checkout-logo">
-                    Image Viewer
+            <div>
+                <Header />
+                <div>
+                    <div className="delivery">
+                    </div>
+                    <div className="summary">
+                    </div>
                 </div>
             </div>
         )
