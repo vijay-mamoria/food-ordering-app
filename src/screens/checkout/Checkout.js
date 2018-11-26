@@ -107,7 +107,7 @@ class Checkout extends Component {
                 });
             }
         });
-        xhr.open("GET", "http://localhost:8080/api/order");
+        xhr.open("GET", this.props.baseUrl + "order");
         xhr.send();
     }
 

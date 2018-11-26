@@ -117,18 +117,21 @@ class Home extends Component {
     }
 
     //Using Fetch with async and await to get json data
-    // async componentWillMount() {
-    //     const response = await fetch(`http://localhost:8080/api/restaurant`);
-    //     const json = await response.json();
-    //     this.setState({ userImages: json.data });
-    //     // Running a for loop to add likes icon to every item in the array
-    //     var userImageLikes = this.state.userImages.slice(0)
-    //     userImageLikes.map(element => {
-    //         element.likesIcon = <FavoriteBorder />;
-    //         element.commentsText = "";
-    //     });
-    //     this.setState({ userImages: userImageLikes })
-    // }
+    componentWillMount() {
+        {/**API to fetch restaurant Details*/ }
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    restaurantDetails: JSON.parse(this.responseText)
+                });
+            }
+        });
+        {/**Extracted Dynamically passed restaurantId from params */ }
+        xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
+        xhr.send();
+    }
 
     showRestaurantDetails = (restaurantId) => {
         this.props.history.push("/details/" + restaurantId);

@@ -231,24 +231,9 @@ class Details extends Component {
             }
         });
         {/**Extracted Dynamically passed restaurantId from params */ }
-        xhr.open("GET", "http://localhost:8080/api/restaurant/" + this.props.match.params.restaurantId);
+        xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
         xhr.send();
     }
-
-
-    //Using Fetch with async and await to get json data
-    // async componentWillMount() {
-    //     const response = await fetch(`http://localhost:8080/api/restaurant/{restaurantID}`);
-    //     const json = await response.json();
-    //     this.setState({ userImages: json.data });
-    //     // Running a for loop to add likes icon to every item in the array
-    //     var userImageLikes = this.state.userImages.slice(0)
-    //     userImageLikes.map(element => {
-    //         element.likesIcon = <FavoriteBorder />;
-    //         element.commentsText = "";
-    //     });
-    //     this.setState({ userImages: userImageLikes })
-    // }
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
