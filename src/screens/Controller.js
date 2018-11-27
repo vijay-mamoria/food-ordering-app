@@ -16,7 +16,8 @@ class Controller extends Component {
         return (
             <Router>
                 <div>
-                    <Route path='/' render={(props) => <Home {...props} baseUrl={this.baseUrl} />} />
+                    {/**exact is needed */}
+                    <Route exact path='/' render={(props) => <Home {...props} baseUrl={this.baseUrl} />} />
                     {/**Passing Restaurant ID Dynamically to Details page. It will be referred with same param name inside */}
                     <Route path='/restaurant/:restaurantId' render={(props) => <Details {...props} baseUrl={this.baseUrl} />} />
                     <Route path='/checkout' render={(props) => <Checkout {...props} baseUrl={this.baseUrl} />} />

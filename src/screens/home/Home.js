@@ -117,24 +117,24 @@ class Home extends Component {
     }
 
     //Using Fetch with async and await to get json data
-    componentWillMount() {
-        {/**API to fetch restaurant Details*/ }
-        let xhr = new XMLHttpRequest();
-        let that = this;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    restaurantDetails: JSON.parse(this.responseText)
-                });
-            }
-        });
-        {/**Extracted Dynamically passed restaurantId from params */ }
-        xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
-        xhr.send();
-    }
+    // componentWillMount() {
+    //     {/**API to fetch restaurant Details*/ }
+    //     let xhr = new XMLHttpRequest();
+    //     let that = this;
+    //     xhr.addEventListener("readystatechange", function () {
+    //         if (this.readyState === 4) {
+    //             that.setState({
+    //                 restaurantDetails: JSON.parse(this.responseText)
+    //             });
+    //         }
+    //     });
+    //     {/**Extracted Dynamically passed restaurantId from params */ }
+    //     xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
+    //     xhr.send();
+    // }
 
     showRestaurantDetails = (restaurantId) => {
-        this.props.history.push("/details/" + restaurantId);
+        this.props.history.push("/restaurant/" + restaurantId);
     }
 
     render() {

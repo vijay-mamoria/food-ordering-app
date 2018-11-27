@@ -5,6 +5,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Divider from '@material-ui/core/Divider';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Details.css';
@@ -219,21 +220,21 @@ class Details extends Component {
         }
     }
 
-    componentWillMount() {
-        {/**API to fetch restaurant Details*/ }
-        let xhr = new XMLHttpRequest();
-        let that = this;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    restaurantDetails: JSON.parse(this.responseText)
-                });
-            }
-        });
-        {/**Extracted Dynamically passed restaurantId from params */ }
-        xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
-        xhr.send();
-    }
+    // componentWillMount() {
+    //     {/**API to fetch restaurant Details*/ }
+    //     let xhr = new XMLHttpRequest();
+    //     let that = this;
+    //     xhr.addEventListener("readystatechange", function () {
+    //         if (this.readyState === 4) {
+    //             that.setState({
+    //                 restaurantDetails: JSON.parse(this.responseText)
+    //             });
+    //         }
+    //     });
+    //     {/**Extracted Dynamically passed restaurantId from params */ }
+    //     xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
+    //     xhr.send();
+    // }
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
@@ -253,34 +254,40 @@ class Details extends Component {
                 <div>
                     <header className="details-header-bg">
                         <div>
-                            <div>
-                                <img src={restaurantDetails.photoUrl} alt="RestaurantImage" />
-                            </div>
-                            <div>
-                                {restaurantDetails.restaurantName}
-                                {restaurantDetails.address.locality}
-                                {restaurantDetails.categories}
-                                {restaurantDetails.userRating}
-                                {restaurantDetails.numberUsersRated}
-                            </div>
-                            <div>
-                                {restaurantDetails.avgPrice}
-                                AVERAGE COST FOR TWO PEOPLE
-                            </div>
+                            <span>
+                                <img className="restaurant-image" src={restaurantDetails.photoUrl} alt="RestaurantImage" />
+                            </span>
+                            <span>
+                                {/**For adjacent state fields need to wrap them in some parent component */}
+                                <Typography>{restaurantDetails.restaurantName}</Typography>
+                                <Typography>{restaurantDetails.address.locality}</Typography>
+                                <Typography>
+                                    {restaurantDetails.categories.map(category => (
+                                        <span key={"category" + category.id}>{category.categoryName}, </span>
+                                    ))}
+                                </Typography>
+                                <Typography>{restaurantDetails.userRating}</Typography>
+                                <Typography>AVERAGE RATING BY <br />{restaurantDetails.numberUsersRated} USERS</Typography>
+                            </span>
+                            <span>
+                                {restaurantDetails.avgPrice} <br /> AVERAGE COST FOR TWO PEOPLE
+                        </span>
                         </div>
                     </header>
                     <div>
                         <div className="menu-items">
                             {restaurantDetails.categories.map(category => (
-                                <div>
+                                <div key={"categoryItems" + category.id}>
                                     <h2>{category.categoryName}
                                         <Divider />
                                     </h2>
-                                    <div>
-                                        {category.type}
-                                        {category.itemName}
-                                        {category.price}
-                                    </div>
+                                    {category.items.map(item => (
+                                        <div key={"item" + item.id}>
+                                            <span>{item.type}</span>
+                                            <span>{item.itemName}</span>
+                                            <span>{item.price}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             ))}
                         </div>
@@ -289,7 +296,7 @@ class Details extends Component {
                                 <CardHeader>My Cart</CardHeader>
                                 <CardContent>
                                     TOTAL AMOUNT
-                                    <Button onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>CHECKOUT</Button>
+                                <Button onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>CHECKOUT</Button>
                                     <Snackbar
                                         anchorOrigin={{ vertical, horizontal }}
                                         open={open}

@@ -1,3 +1,8 @@
 .details-header-bg{
     background-color: grey;
 }
+
+.restaurant-image{
+    height: 500px;
+    width: 500px;
+}
