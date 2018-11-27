@@ -238,6 +238,7 @@ class Details extends Component {
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
+        this.props.history.push("/checkout");
     };
 
     handleClose = () => {
@@ -293,10 +294,15 @@ class Details extends Component {
                         </div>
                         <div className="myCart">
                             <Card>
-                                <CardHeader>My Cart</CardHeader>
                                 <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        My Cart
+                              </Typography>
                                     TOTAL AMOUNT
-                                <Button onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>CHECKOUT</Button>
+                                <Button variant="contained" color="primary"
+                                        onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>
+                                        CHECKOUT
+                                </Button>
                                     <Snackbar
                                         anchorOrigin={{ vertical, horizontal }}
                                         open={open}

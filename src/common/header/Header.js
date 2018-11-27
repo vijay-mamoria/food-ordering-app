@@ -77,7 +77,17 @@ class Header extends Component {
     }
 
     inputSearchChangeHandler = (e) => {
-        console.log(e.target.value);
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    restaurantDetails: JSON.parse(this.responseText)
+                });
+            }
+        });
+        xhr.open("GET", this.props.baseUrl + "restaurant/name/" + e.target.value);
+        xhr.send();
     }
 
     onProfileIconClickHandler = () => {
