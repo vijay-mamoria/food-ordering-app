@@ -143,7 +143,7 @@ class Home extends Component {
             <div>
                 <Header />
                 <div className="main-body-container">
-                    <GridList cellHeight={"auto"} className={classes.gridListMain} cols={2}>
+                    <GridList cellHeight={"auto"} className={classes.gridListMain} cols={3}>
                         {/**Check implementation of onClick for GridListTile. If we directly write method name then it executes immediately*/}
                         {this.state.restaurants.map(restaurant => (
                             <GridListTile onClick={() => this.showRestaurantDetails(restaurant.id)}>
@@ -151,11 +151,13 @@ class Home extends Component {
                                     <CardContent>
                                         <img src={restaurant.photoUrl} alt="RestaurantImage" />
                                         <Typography>
-                                            <p>{restaurant.restaurantName}</p>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                {restaurant.restaurantName}
+                                            </Typography>
                                             <p>{restaurant.categories}</p>
                                             <div>
                                                 <span className="rating">{restaurant.userRating} ({restaurant.numberUsersRated})</span>
-                                                <span>{restaurant.avgPrice}</span>
+                                                <span>{restaurant.avgPrice} for two</span>
                                             </div>
                                         </Typography>
                                     </CardContent>
