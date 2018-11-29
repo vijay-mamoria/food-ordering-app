@@ -46,7 +46,7 @@ class Header extends Component {
         this.state = {
             loggedIn: true,
             userData: "",
-            displayMenu: false,
+            anchorEl: null,
             isModalOpen: false,//Modal State
             value: 1,//Tab Value
             //Login Tab Fields
@@ -67,22 +67,13 @@ class Header extends Component {
         }
     }
 
-    //Using Fetch with async and await to get json data
-    async componentDidMount() {
-        if (this.state.loggedIn) {
-            const response = await fetch(`https://api.instagram.com/v1/users/self/?access_token=9204272757.f8594e7.25756c2b57804b6b8b1cb08b48e45566`);
-            const json = await response.json();
-            this.setState({ userData: json.data });
-        }
-    }
-
     inputSearchChangeHandler = (e) => {
         let xhr = new XMLHttpRequest();
         let that = this;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    restaurantDetails: JSON.parse(this.responseText)
+                    filteredRestaurantList: JSON.parse(this.responseText)
                 });
             }
         });
@@ -230,15 +221,29 @@ class Header extends Component {
         xhrSignup.send(dataSignup);
     }
 
-    showMenu = () => {
-        this.setState({ displayMenu: true });
+    showMenu = (e) => {
+        this.setState({ anchorEl: e.currentTarget });
     }
 
     hideMenu = () => {
-        this.setState({ displayMenu: false });
+        this.setState({ anchorEl: null });
+    }
+
+    myAccountClickHandler = () => {
+        this.props.history.push("/profile");
+    }
+
+    logoutClickHandler = () => {
+        sessionStorage.removeItem("uuid");
+        sessionStorage.removeItem("access-token");
+
+        this.setState({
+            loggedIn: false
+        });
     }
 
     render() {
+        const { anchorEl } = this.state;
         return (
             <div >
                 <div>
@@ -264,13 +269,15 @@ class Header extends Component {
                                         <span>
                                             {/** User Profile Button*/}
                                             <Button variant="contained" color="default"
-                                                aria-owns={this.state.displayMenu ? 'simple-menu' : undefined}
+                                                aria-owns={anchorEl ? 'menu-list-grow' : undefined}
                                                 aria-haspopup="true"
                                                 onClick={this.showMenu}>
                                                 <AccountCircle /> FirstName
                                             </Button>
                                             {/** Menu for Logged in User*/}
-                                            <Menu id="simple-menu" open={this.state.displayMenu} onClose={this.hideMenu}>
+                                            <Menu id="simple-menu"
+                                                anchorEl={anchorEl}
+                                                open={Boolean(anchorEl)} onClose={this.hideMenu}>
                                                 {/**Check if this onclick method executing then remove Link Tag */}
                                                 <MenuItem key="1" onClick={this.myAccountClickHandler}>
                                                     My Profile
