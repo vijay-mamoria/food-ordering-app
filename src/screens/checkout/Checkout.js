@@ -1,7 +1,7 @@
+import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -10,11 +10,17 @@ import StepContent from '@material-ui/core/StepContent';
 import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 import { withStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Checkout.css';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = theme => ({
     root: {
@@ -39,18 +45,17 @@ function getSteps() {
     return ['Delivery', 'Payment'];
 }
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`;
-        case 1:
-            return 'An ad group contains one or more ads which target a shared set of keywords.';
-        default:
-            return 'Unknown step';
-    }
+function TabContainer(props) {
+    return (
+        <Typography component="div" style={{ padding: 8 * 3 }}>
+            {props.children}
+        </Typography>
+    );
 }
+
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 class Checkout extends Component {
 
@@ -58,14 +63,135 @@ class Checkout extends Component {
         super();
         this.state = {
             activeStep: 0,
+            value: 0,
             orderId: '',
             //Snackbar Message Item
             open: false,
             vertical: 'top',
             horizontal: 'center',
             placeOrderNotificationMessage: '',
+            addresses: [
+                {
+                    "id": 4,
+                    "flatBuilNo": "C-201, MHS CHS",
+                    "locality": "Anpara",
+                    "city": "Singrauli",
+                    "zipcode": "231224",
+                    "state": {
+                        "id": 6,
+                        "stateName": "Chandigarh"
+                    }
+                },
+                {
+                    "id": 5,
+                    "flatBuilNo": "B-244, Kakri Colony",
+                    "locality": "Kakri",
+                    "city": "Dhanbad",
+                    "zipcode": "231278",
+                    "state": {
+                        "id": 8,
+                        "stateName": "Dadar and Nagar Haveli"
+                    }
+                }
+            ],
+            //New Address Fields
+            flatRequired: "disp-none",
+            flat: "",
+            locality: "",
+            cityRequired: "disp-none",
+            city: "",
+            stateRequired: "disp-none",
+            state: "",
+            zipcodeRequired: "disp-none",
+            zipcode: ""
         }
     }
+
+    // componentWillMount() {
+    //     {/**API to fetch restaurant Details*/ }
+    //     let xhr = new XMLHttpRequest();
+    //     let that = this;
+    //     xhr.addEventListener("readystatechange", function () {
+    //         if (this.readyState === 4) {
+    //             that.setState({
+    //                 addresses: JSON.parse(this.responseText)
+    //             });
+    //         }
+    //     });
+    //     {/**Extracted Dynamically passed restaurantId from params */ }
+    //     xhr.open("GET", this.props.baseUrl + "address/user");
+    //     xhr.send();
+    //states - API call
+    // }
+
+    handleTabChange = (event, value) => {
+        this.setState({ value });
+    };
+
+    getStepContent = (step) => {
+        switch (step) {
+            case 0:
+                return < div >
+                    <div>
+                        <AppBar position="static">
+                            <Tabs value={this.state.value} onChange={this.handleTabChange}>
+                                <Tab label="EXISTING ADDRESS" />
+                                <Tab label="NEW ADDRESS" />
+                            </Tabs>
+                        </AppBar>
+                        {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
+                        {this.state.value === 1 && <TabContainer>
+
+                            <FormControl required>
+                                <InputLabel htmlFor="flat">Flat / Building No.</InputLabel>
+                                <Input id="flat" type="text" flat={this.state.flat} onChange={this.inputflatChangeHandler} />
+                                <FormHelperText className={this.state.flatRequired}>
+                                    <span className="red">required</span>
+                                </FormHelperText>
+                            </FormControl>
+                            <br /><br />
+                            <FormControl>
+                                <InputLabel htmlFor="locality">Locality</InputLabel>
+                                <Input id="locality" type="text" locality={this.state.locality} onChange={this.inputlocalityChangeHandler} />
+                                <FormHelperText className={this.state.cityRequired}>
+                                    <span className="red">required</span>
+                                </FormHelperText>
+                            </FormControl>
+                            <br /><br />
+                            <FormControl required>
+                                <InputLabel htmlFor="city">City</InputLabel>
+                                <Input id="city" type="text" city={this.state.city} onChange={this.inputcityChangeHandler} />
+                                <FormHelperText className={this.state.cityRequired}>
+                                    <span className="red">required</span>
+                                </FormHelperText>
+                            </FormControl>
+                            <br /><br />
+                            <FormControl required>
+                                <InputLabel htmlFor="state">State</InputLabel>
+                                <Input id="state" type="password" state={this.state.state} onChange={this.inputstateChangeHandler} />
+                                <FormHelperText className={this.state.stateRequired}>
+                                    <span className="red">required</span>
+                                </FormHelperText>
+                            </FormControl>
+                            <br /><br />
+                            <FormControl required>
+                                <InputLabel htmlFor="zipcode">Zipcode</InputLabel>
+                                <Input id="zipcode" type="text" zipcode={this.state.zipcode} onChange={this.inputzipcodeChangeHandler} />
+                                <FormHelperText className={this.state.zipcodeRequired}>
+                                    <span className="red">required</span>
+                                </FormHelperText>
+                            </FormControl>
+
+                        </TabContainer>}
+                    </div>
+                </div >
+            case 1:
+                return <div>
+                </div>
+            default:
+                return 'Unknown step';
+        }
+    };
 
     /**
      * Vertical Stepper Functions
@@ -125,7 +251,7 @@ class Checkout extends Component {
                                         <Step key={label}>
                                             <StepLabel>{label}</StepLabel>
                                             <StepContent>
-                                                <Typography>{getStepContent(index)}</Typography>
+                                                <Typography>{this.getStepContent(index)}</Typography>
                                                 <div className={classes.actionsContainer}>
                                                     <div>
                                                         <Button
