@@ -58,6 +58,7 @@ class Checkout extends Component {
         super();
         this.state = {
             activeStep: 0,
+            orderId: '',
             //Snackbar Message Item
             open: false,
             vertical: 'top',
@@ -98,12 +99,13 @@ class Checkout extends Component {
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
-                    restaurantDetails: JSON.parse(this.responseText)
+                    orderId: JSON.parse(this.responseText)
                 });
             }
         });
-        xhr.open("GET", this.props.baseUrl + "order");
-        xhr.send();
+        xhr.open("POST", this.props.baseUrl + "order");
+        let orderData = null;
+        xhr.send(orderData);
     }
 
     render() {
@@ -160,8 +162,10 @@ class Checkout extends Component {
                     </div>
                     <div className="summary">
                         <Card>
-                            <CardHeader>Summary</CardHeader>
                             <CardContent>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    Summary
+                                </Typography>
                                 <Divider />
                                 Net Amount
                                 <Button variant="contained" color="primary" onClick={this.placeOrderClickHandler}>PLACE ORDER</Button>

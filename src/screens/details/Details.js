@@ -260,7 +260,9 @@ class Details extends Component {
                             </span>
                             <span>
                                 {/**For adjacent state fields need to wrap them in some parent component */}
-                                <Typography>{restaurantDetails.restaurantName}</Typography>
+                                <Typography gutterBottom variant="h5" component="h2">
+                                    {restaurantDetails.restaurantName}
+                                </Typography>
                                 <Typography>{restaurantDetails.address.locality}</Typography>
                                 <Typography>
                                     {restaurantDetails.categories.map(category => (
@@ -271,7 +273,7 @@ class Details extends Component {
                                 <Typography>AVERAGE RATING BY <br />{restaurantDetails.numberUsersRated} USERS</Typography>
                             </span>
                             <span>
-                                {restaurantDetails.avgPrice} <br /> AVERAGE COST FOR TWO PEOPLE
+                                {restaurantDetails.avgPrice} <br /> AVERAGE COST FOR <br />TWO PEOPLE
                         </span>
                         </div>
                     </header>
@@ -297,7 +299,7 @@ class Details extends Component {
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         My Cart
-                              </Typography>
+                                    </Typography>
                                     TOTAL AMOUNT
                                 <Button variant="contained" color="primary"
                                         onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>
