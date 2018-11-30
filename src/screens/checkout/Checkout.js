@@ -1,8 +1,14 @@
+import { GridListTile } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import GridList from '@material-ui/core/GridList';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 import Step from '@material-ui/core/Step';
@@ -17,10 +23,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Checkout.css';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = theme => ({
     root: {
@@ -38,6 +40,9 @@ const styles = theme => ({
     },
     snackbar: {
         margin: theme.spacing.unit,
+    },
+    gridListMain: {
+        transform: 'translateZ(0)',
     },
 });
 
@@ -97,38 +102,218 @@ class Checkout extends Component {
             //New Address Fields
             flatRequired: "disp-none",
             flat: "",
+            localityRequired: "disp-none",
             locality: "",
             cityRequired: "disp-none",
             city: "",
             stateRequired: "disp-none",
-            state: "",
+            state: [
+                {
+                    "id": 1,
+                    "stateName": "Andaman and Nicobar Islands"
+                },
+                {
+                    "id": 2,
+                    "stateName": "Andhra Pradesh"
+                },
+                {
+                    "id": 3,
+                    "stateName": "Arunachal Pradesh"
+                },
+                {
+                    "id": 4,
+                    "stateName": "Assam"
+                },
+                {
+                    "id": 5,
+                    "stateName": "Bihar"
+                },
+                {
+                    "id": 6,
+                    "stateName": "Chandigarh"
+                },
+                {
+                    "id": 7,
+                    "stateName": "Chhattisgarh"
+                },
+                {
+                    "id": 8,
+                    "stateName": "Dadar and Nagar Haveli"
+                },
+                {
+                    "id": 9,
+                    "stateName": "Daman and Diu"
+                },
+                {
+                    "id": 10,
+                    "stateName": "Delhi"
+                },
+                {
+                    "id": 11,
+                    "stateName": "Goa"
+                },
+                {
+                    "id": 12,
+                    "stateName": "Gujarat"
+                },
+                {
+                    "id": 13,
+                    "stateName": "Haryana"
+                },
+                {
+                    "id": 14,
+                    "stateName": "Himachal Pradesh"
+                },
+                {
+                    "id": 15,
+                    "stateName": "Jammu and Kashmir"
+                },
+                {
+                    "id": 16,
+                    "stateName": "Jharkhand"
+                },
+                {
+                    "id": 17,
+                    "stateName": "Karnataka"
+                },
+                {
+                    "id": 18,
+                    "stateName": "Kerala"
+                },
+                {
+                    "id": 19,
+                    "stateName": "Lakshadweep"
+                },
+                {
+                    "id": 20,
+                    "stateName": "Madhya Pradesh"
+                },
+                {
+                    "id": 21,
+                    "stateName": "Maharashtra"
+                },
+                {
+                    "id": 22,
+                    "stateName": "Manipur"
+                },
+                {
+                    "id": 23,
+                    "stateName": "Meghalaya"
+                },
+                {
+                    "id": 24,
+                    "stateName": "Mizoram"
+                },
+                {
+                    "id": 25,
+                    "stateName": "Nagaland"
+                },
+                {
+                    "id": 26,
+                    "stateName": "Odisha"
+                },
+                {
+                    "id": 27,
+                    "stateName": "Puducherry"
+                },
+                {
+                    "id": 28,
+                    "stateName": "Punjab"
+                },
+                {
+                    "id": 29,
+                    "stateName": "Rajasthan"
+                },
+                {
+                    "id": 30,
+                    "stateName": "Sikkim"
+                },
+                {
+                    "id": 31,
+                    "stateName": "Tamil Nadu"
+                },
+                {
+                    "id": 32,
+                    "stateName": "Telangana"
+                },
+                {
+                    "id": 33,
+                    "stateName": "Tripura"
+                },
+                {
+                    "id": 34,
+                    "stateName": "Uttar Pradesh"
+                },
+                {
+                    "id": 35,
+                    "stateName": "Uttarakhand"
+                },
+                {
+                    "id": 36,
+                    "stateName": "West Bengal"
+                }
+            ],
             zipcodeRequired: "disp-none",
             zipcode: ""
         }
     }
 
     // componentWillMount() {
-    //     {/**API to fetch restaurant Details*/ }
-    //     let xhr = new XMLHttpRequest();
+    //     {/**API to fetch existing stored addresses*/ }
+    //     let xhrAddress = new XMLHttpRequest();
     //     let that = this;
-    //     xhr.addEventListener("readystatechange", function () {
+    //     xhrAddress.addEventListener("readystatechange", function () {
     //         if (this.readyState === 4) {
     //             that.setState({
     //                 addresses: JSON.parse(this.responseText)
     //             });
     //         }
     //     });
-    //     {/**Extracted Dynamically passed restaurantId from params */ }
-    //     xhr.open("GET", this.props.baseUrl + "address/user");
-    //     xhr.send();
-    //states - API call
+    //     xhrAddress.open("GET", this.props.baseUrl + "address/user");
+    //     xhrAddress.send();
+
+    //     {/**API to fetch State Names*/ }
+    //     let xhrState = new XMLHttpRequest();
+    //     let that = this;
+    //     xhrState.addEventListener("readystatechange", function () {
+    //         if (this.readyState === 4) {
+    //             that.setState({
+    //                 addresses: JSON.parse(this.responseText)
+    //             });
+    //         }
+    //     });
+    //
+    //     xhrState.open("GET", this.props.baseUrl + "states");
+    //     xhrState.send();
+    //
     // }
+
+    inputFlatChangeHandler = (e) => {
+        this.setState({ flat: e.target.value });
+    }
+
+    inputLocalityChangeHandler = (e) => {
+        this.setState({ locality: e.target.value });
+    }
+
+    inputCityChangeHandler = (e) => {
+        this.setState({ city: e.target.value });
+    }
+
+    inputStateChangeHandler = (e) => {
+        this.setState({ state: e.target.value });
+    }
+
+    inputZipcodeChangeHandler = (e) => {
+        this.setState({ zipcode: e.target.value });
+    }
 
     handleTabChange = (event, value) => {
         this.setState({ value });
     };
 
     getStepContent = (step) => {
+        const { classes } = this.props;
         switch (step) {
             case 0:
                 return < div >
@@ -139,28 +324,58 @@ class Checkout extends Component {
                                 <Tab label="NEW ADDRESS" />
                             </Tabs>
                         </AppBar>
-                        {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
+                        {this.state.value === 0 && <TabContainer>
+                            <div className="existing-address-container">
+                                <GridList cellHeight={"auto"} className={classes.gridListMain} cols={3}>
+                                    {/**Check implementation of onClick for GridListTile. If we directly write method name then it executes immediately*/}
+                                    {this.state.addresses.map(address => (
+                                        <GridListTile>
+                                            <Card key={address.id} className="address">
+                                                <CardContent>
+                                                    <div>
+                                                        <Typography>
+                                                            {address.flatBuilNo}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {address.locality}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {address.city}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {address.state.stateName}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {address.zipcode}
+                                                        </Typography>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </GridListTile>
+                                    ))}
+                                </GridList>
+                            </div>
+                            There are no saved addresses! You can save an address using your ‘Profile’ menu option.</TabContainer>}
                         {this.state.value === 1 && <TabContainer>
-
                             <FormControl required>
                                 <InputLabel htmlFor="flat">Flat / Building No.</InputLabel>
-                                <Input id="flat" type="text" flat={this.state.flat} onChange={this.inputflatChangeHandler} />
+                                <Input id="flat" type="text" flat={this.state.flat} onChange={this.inputFlatChangeHandler} />
                                 <FormHelperText className={this.state.flatRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
-                            <FormControl>
+                            <FormControl required>
                                 <InputLabel htmlFor="locality">Locality</InputLabel>
-                                <Input id="locality" type="text" locality={this.state.locality} onChange={this.inputlocalityChangeHandler} />
-                                <FormHelperText className={this.state.cityRequired}>
+                                <Input id="locality" type="text" locality={this.state.locality} onChange={this.inputLocalityChangeHandler} />
+                                <FormHelperText className={this.state.localityRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
                             <FormControl required>
                                 <InputLabel htmlFor="city">City</InputLabel>
-                                <Input id="city" type="text" city={this.state.city} onChange={this.inputcityChangeHandler} />
+                                <Input id="city" type="text" city={this.state.city} onChange={this.inputCityChangeHandler} />
                                 <FormHelperText className={this.state.cityRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
@@ -168,7 +383,7 @@ class Checkout extends Component {
                             <br /><br />
                             <FormControl required>
                                 <InputLabel htmlFor="state">State</InputLabel>
-                                <Input id="state" type="password" state={this.state.state} onChange={this.inputstateChangeHandler} />
+                                <Input id="state" type="password" state={this.state.state} onChange={this.inputStateChangeHandler} />
                                 <FormHelperText className={this.state.stateRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
@@ -176,7 +391,7 @@ class Checkout extends Component {
                             <br /><br />
                             <FormControl required>
                                 <InputLabel htmlFor="zipcode">Zipcode</InputLabel>
-                                <Input id="zipcode" type="text" zipcode={this.state.zipcode} onChange={this.inputzipcodeChangeHandler} />
+                                <Input id="zipcode" type="text" zipcode={this.state.zipcode} onChange={this.inputZipcodeChangeHandler} />
                                 <FormHelperText className={this.state.zipcodeRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
