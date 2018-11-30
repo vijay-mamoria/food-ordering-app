@@ -5,11 +5,18 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
 import GridList from '@material-ui/core/GridList';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import Step from '@material-ui/core/Step';
 import StepContent from '@material-ui/core/StepContent';
@@ -43,6 +50,14 @@ const styles = theme => ({
     },
     gridListMain: {
         transform: 'translateZ(0)',
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 240,
+        maxWidth: 240
+    },
+    group: {
+        margin: `${theme.spacing.unit}px 0`,
     },
 });
 
@@ -107,7 +122,7 @@ class Checkout extends Component {
             cityRequired: "disp-none",
             city: "",
             stateRequired: "disp-none",
-            state: [
+            states: [
                 {
                     "id": 1,
                     "stateName": "Andaman and Nicobar Islands"
@@ -128,133 +143,41 @@ class Checkout extends Component {
                     "id": 5,
                     "stateName": "Bihar"
                 },
+            ],
+            zipcodeRequired: "disp-none",
+            zipcode: "",
+            //Payment Step
+            paymentOptions: [
+                {
+                    "id": 1,
+                    "paymentName": "Paytm"
+                },
+                {
+                    "id": 2,
+                    "paymentName": "Food Card"
+                },
+                {
+                    "id": 3,
+                    "paymentName": "UPI"
+                },
+                {
+                    "id": 4,
+                    "paymentName": "COD"
+                },
+                {
+                    "id": 5,
+                    "paymentName": "Debit Card"
+                },
                 {
                     "id": 6,
-                    "stateName": "Chandigarh"
+                    "paymentName": "Credit Card"
                 },
                 {
                     "id": 7,
-                    "stateName": "Chhattisgarh"
-                },
-                {
-                    "id": 8,
-                    "stateName": "Dadar and Nagar Haveli"
-                },
-                {
-                    "id": 9,
-                    "stateName": "Daman and Diu"
-                },
-                {
-                    "id": 10,
-                    "stateName": "Delhi"
-                },
-                {
-                    "id": 11,
-                    "stateName": "Goa"
-                },
-                {
-                    "id": 12,
-                    "stateName": "Gujarat"
-                },
-                {
-                    "id": 13,
-                    "stateName": "Haryana"
-                },
-                {
-                    "id": 14,
-                    "stateName": "Himachal Pradesh"
-                },
-                {
-                    "id": 15,
-                    "stateName": "Jammu and Kashmir"
-                },
-                {
-                    "id": 16,
-                    "stateName": "Jharkhand"
-                },
-                {
-                    "id": 17,
-                    "stateName": "Karnataka"
-                },
-                {
-                    "id": 18,
-                    "stateName": "Kerala"
-                },
-                {
-                    "id": 19,
-                    "stateName": "Lakshadweep"
-                },
-                {
-                    "id": 20,
-                    "stateName": "Madhya Pradesh"
-                },
-                {
-                    "id": 21,
-                    "stateName": "Maharashtra"
-                },
-                {
-                    "id": 22,
-                    "stateName": "Manipur"
-                },
-                {
-                    "id": 23,
-                    "stateName": "Meghalaya"
-                },
-                {
-                    "id": 24,
-                    "stateName": "Mizoram"
-                },
-                {
-                    "id": 25,
-                    "stateName": "Nagaland"
-                },
-                {
-                    "id": 26,
-                    "stateName": "Odisha"
-                },
-                {
-                    "id": 27,
-                    "stateName": "Puducherry"
-                },
-                {
-                    "id": 28,
-                    "stateName": "Punjab"
-                },
-                {
-                    "id": 29,
-                    "stateName": "Rajasthan"
-                },
-                {
-                    "id": 30,
-                    "stateName": "Sikkim"
-                },
-                {
-                    "id": 31,
-                    "stateName": "Tamil Nadu"
-                },
-                {
-                    "id": 32,
-                    "stateName": "Telangana"
-                },
-                {
-                    "id": 33,
-                    "stateName": "Tripura"
-                },
-                {
-                    "id": 34,
-                    "stateName": "Uttar Pradesh"
-                },
-                {
-                    "id": 35,
-                    "stateName": "Uttarakhand"
-                },
-                {
-                    "id": 36,
-                    "stateName": "West Bengal"
+                    "paymentName": "Net Banking"
                 }
             ],
-            zipcodeRequired: "disp-none",
-            zipcode: ""
+            selectedPaymentOption: '',
         }
     }
 
@@ -286,6 +209,21 @@ class Checkout extends Component {
     //     xhrState.open("GET", this.props.baseUrl + "states");
     //     xhrState.send();
     //
+
+
+    //     {/**API to fetch payment options*/ }
+    //     let xhrPayment = new XMLHttpRequest();
+    //     let that = this;
+    //     xhrPayment.addEventListener("readystatechange", function () {
+    //         if (this.readyState === 4) {
+    //             that.setState({
+    //                 paymentOptions: JSON.parse(this.responseText)
+    //             });
+    //         }
+    //     });
+    //
+    //     xhrPayment.open("GET", this.props.baseUrl + "payment");
+    //     xhrPayment.send();
     // }
 
     inputFlatChangeHandler = (e) => {
@@ -310,6 +248,10 @@ class Checkout extends Component {
 
     handleTabChange = (event, value) => {
         this.setState({ value });
+    };
+
+    handlePaymentOptionChange = (e) => {
+        this.setState({ selectedPaymentOption: e.target.value });
     };
 
     getStepContent = (step) => {
@@ -357,7 +299,7 @@ class Checkout extends Component {
                             </div>
                             There are no saved addresses! You can save an address using your ‘Profile’ menu option.</TabContainer>}
                         {this.state.value === 1 && <TabContainer>
-                            <FormControl required>
+                            <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="flat">Flat / Building No.</InputLabel>
                                 <Input id="flat" type="text" flat={this.state.flat} onChange={this.inputFlatChangeHandler} />
                                 <FormHelperText className={this.state.flatRequired}>
@@ -365,7 +307,7 @@ class Checkout extends Component {
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
-                            <FormControl required>
+                            <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="locality">Locality</InputLabel>
                                 <Input id="locality" type="text" locality={this.state.locality} onChange={this.inputLocalityChangeHandler} />
                                 <FormHelperText className={this.state.localityRequired}>
@@ -373,7 +315,7 @@ class Checkout extends Component {
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
-                            <FormControl required>
+                            <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="city">City</InputLabel>
                                 <Input id="city" type="text" city={this.state.city} onChange={this.inputCityChangeHandler} />
                                 <FormHelperText className={this.state.cityRequired}>
@@ -381,15 +323,24 @@ class Checkout extends Component {
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
-                            <FormControl required>
+                            <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="state">State</InputLabel>
-                                <Input id="state" type="password" state={this.state.state} onChange={this.inputStateChangeHandler} />
+                                <Select
+                                    input={<Input id="select-multiple-checkbox-genre" />}
+                                    value={this.state.states}
+                                    onChange={this.inputStateChangeHandler}>
+                                    {this.state.states.map(stateDetail => (
+                                        <MenuItem key={stateDetail.id} value={stateDetail.stateName}>
+                                            <ListItemText primary={stateDetail.stateName} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                                 <FormHelperText className={this.state.stateRequired}>
                                     <span className="red">required</span>
                                 </FormHelperText>
                             </FormControl>
                             <br /><br />
-                            <FormControl required>
+                            <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="zipcode">Zipcode</InputLabel>
                                 <Input id="zipcode" type="text" zipcode={this.state.zipcode} onChange={this.inputZipcodeChangeHandler} />
                                 <FormHelperText className={this.state.zipcodeRequired}>
@@ -401,8 +352,19 @@ class Checkout extends Component {
                     </div>
                 </div >
             case 1:
-                return <div>
-                </div>
+                return <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend">Select Mode of Payment</FormLabel>
+                    <RadioGroup
+                        aria-label="ModeOfPayment"
+                        name="modeOfPayment"
+                        className={classes.group}
+                        value={this.state.selectedPaymentOption}
+                        onChange={this.handlePaymentOptionChange}>
+                        {this.state.paymentOptions.map(paymentOption => (
+                            <FormControlLabel value={paymentOption.id} control={<Radio />} label={paymentOption.paymentName} />
+                        ))}
+                    </RadioGroup>
+                </FormControl>
             default:
                 return 'Unknown step';
         }
