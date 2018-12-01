@@ -30,6 +30,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Checkout.css';
+import CheckCircle from '@material-ui/icons/CheckCircle';
 
 const styles = theme => ({
     root: {
@@ -290,14 +291,16 @@ class Checkout extends Component {
                                                         <Typography>
                                                             {address.zipcode}
                                                         </Typography>
+                                                        <CheckCircle />
                                                     </div>
                                                 </CardContent>
                                             </Card>
                                         </GridListTile>
                                     ))}
                                 </GridList>
+                                <span>There are no saved addresses! You can save an address using your ‘Profile’ menu option.</span>
                             </div>
-                            There are no saved addresses! You can save an address using your ‘Profile’ menu option.</TabContainer>}
+                        </TabContainer>}
                         {this.state.value === 1 && <TabContainer>
                             <FormControl required className={classes.formControl}>
                                 <InputLabel htmlFor="flat">Flat / Building No.</InputLabel>
@@ -419,8 +422,8 @@ class Checkout extends Component {
         return (
             <div>
                 <Header />
-                <div>
-                    <div className="delivery">
+                <div className="checkout-page-container">
+                    <div className="delivery-payment-details">
                         <div className={classes.root}>
                             <Stepper activeStep={activeStep} orientation="vertical">
                                 {steps.map((label, index) => {
@@ -434,16 +437,14 @@ class Checkout extends Component {
                                                         <Button
                                                             disabled={activeStep === 0}
                                                             onClick={this.handleBack}
-                                                            className={classes.button}
-                                                        >
+                                                            className={classes.button}>
                                                             Back
-                                  </Button>
+                                                        </Button>
                                                         <Button
                                                             variant="contained"
                                                             color="primary"
                                                             onClick={this.handleNext}
-                                                            className={classes.button}
-                                                        >
+                                                            className={classes.button}>
                                                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                                         </Button>
                                                     </div>
@@ -469,8 +470,23 @@ class Checkout extends Component {
                                 <Typography gutterBottom variant="h5" component="h2">
                                     Summary
                                 </Typography>
+                                {this.props.location.orderSummary.cartItems.map(item => (
+                                    <div key={"item" + item.id}>
+                                        <span>{item.type === 'Veg' &&
+                                            <i className="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
+                                            {item.type === 'Non-Veg' &&
+                                                <i className="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
+                                        </span>
+                                        <span>{item.itemName}</span>
+                                        <span>{item.quantity}</span>
+                                        <span>{item.totalPrice}</span>
+                                    </div>
+                                ))}
+                                <br />
                                 <Divider />
-                                Net Amount
+                                <br />
+                                Net Amount {this.props.location.orderSummary.totalCartItemsValue}
+                                <br /><br />
                                 <Button variant="contained" color="primary" onClick={this.placeOrderClickHandler}>PLACE ORDER</Button>
                                 <Snackbar
                                     anchorOrigin={{ vertical, horizontal }}

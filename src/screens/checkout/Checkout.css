@@ -1,3 +1,17 @@
+.checkout-page-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.delivery-payment-details{
+    width: 800px;
+}
+
+.summary{
+    margin: 30px 60px auto auto;
+    width: 400px;
+}
+
 .disp-none{
     display: none;
 }

@@ -180,6 +180,7 @@ class Details extends Component {
             for (var i = 0; i < newCartItems.length; i++) {
                 if (newCartItems[i].id === item.id) {
                     item.quantity = item.quantity + 1;
+                    item.totalPrice = item.quantity * item.price;
                     itemAlreadyAdded = true;
                     break;
                 }
@@ -187,6 +188,7 @@ class Details extends Component {
         }
         if (!itemAlreadyAdded) {
             item.quantity = 1;
+            item.totalPrice = item.quantity * item.price;
             newCartItems.push(item);
         }
         this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
@@ -205,8 +207,10 @@ class Details extends Component {
             if (removeCartItems[i].id === item.id) {
                 if (item.quantity > 1) {
                     item.quantity = item.quantity - 1;
+                    item.totalPrice = item.quantity * item.price;
                 } else {
                     removeCartItems.splice(i, 1);
+                    item.totalPrice = 0;
                 }
             }
         }
@@ -226,7 +230,10 @@ class Details extends Component {
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
-        this.props.history.push("/checkout");
+        this.props.history.push({
+            pathname: '/checkout',
+            orderSummary: this.state
+        })
     };
 
     handleClose = () => {
@@ -330,7 +337,7 @@ class Details extends Component {
                                                     <Add />
                                                 </IconButton>
                                             </span>
-                                            <span>{item.price}</span>
+                                            <span>{item.totalPrice}</span>
                                         </div>
                                     ))}
                                     TOTAL AMOUNT {this.state.totalCartItemsValue}
