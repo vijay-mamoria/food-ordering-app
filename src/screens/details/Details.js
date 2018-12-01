@@ -178,14 +178,13 @@ class Details extends Component {
     };
 
     removeCartItemClickHandler = (item) => {
-        let newCartItems = this.state.cartItems;
-        for (var i = 0; i < newCartItems.length - 1; i++) {
-            if (newCartItems[i].id === item.id) {
-                newCartItems.splice(i, 1);
+        var removeCartItems = this.state.cartItems;
+        for (var i = 0; i < removeCartItems.length; i++) {
+            if (removeCartItems[i].id === item.id) {
+                removeCartItems.splice(i, 1);
             }
         }
-        console.log("newCartItems[i].id = " + newCartItems[i].id + "item.id =" + item.id + "newCartItems = " + newCartItems);
-        this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
+        this.setState({ cartItems: removeCartItems, open: true, cartNotificationMessage: 'Item quantity decreased by 1!' });
     };
 
     onClickCheckoutButton = state => () => {
