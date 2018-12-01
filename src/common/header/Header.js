@@ -182,7 +182,7 @@ class Header extends Component {
             }
         });
     
-        xhrLogin.open("POST", this.props.baseUrl + "auth/login");
+        xhrLogin.open("POST", this.props.baseUrl + "user/login");
         xhrLogin.setRequestHeader("Authorization", "Basic " + window.btoa(this.state.loginContact + ":" + this.state.loginPassword));
         xhrLogin.setRequestHeader("Content-Type", "application/json");
         xhrLogin.setRequestHeader("Cache-Control", "no-cache");
@@ -193,13 +193,13 @@ class Header extends Component {
     signupClickHandler = () => {
         this.state.firstname === "" ? this.setState({ firstnameRequired: "disp-block" }) : this.setState({ firstnameRequired: "disp-none" });
         this.state.email === "" ? this.setState({ emailRequired: "disp-block" }) : this.setState({ emailRequired: "disp-none" });
-        this.state.registerPassword === "" ? this.setState({ registerPasswordRequired: "disp-block" }) : this.setState({ registerPasswordRequired: "disp-none" });
         this.state.contact === "" ? this.setState({ contactRequired: "disp-block" }) : this.setState({ contactRequired: "disp-none" });
+        this.state.registerPassword === "" ? this.setState({ registerPasswordRequired: "disp-block" }) : this.setState({ registerPasswordRequired: "disp-none" });
 
         let dataSignup = JSON.stringify({
-            "email_address": this.state.email,
             "first_name": this.state.firstname,
             "last_name": this.state.lastname,
+            "email_address": this.state.email,
             "mobile_number": this.state.contact,
             "password": this.state.registerPassword
         });
@@ -215,7 +215,7 @@ class Header extends Component {
             }
         });
 
-        xhrSignup.open("POST", this.props.baseUrl + "signup");
+        xhrSignup.open("POST", this.props.baseUrl + "user/signup");
         xhrSignup.setRequestHeader("Content-Type", "application/json");
         xhrSignup.setRequestHeader("Cache-Control", "no-cache");
         xhrSignup.send(dataSignup);

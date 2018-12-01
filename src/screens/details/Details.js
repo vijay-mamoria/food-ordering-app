@@ -273,7 +273,7 @@ class Details extends Component {
                                 <Typography>AVERAGE RATING BY <br />{restaurantDetails.numberUsersRated} USERS</Typography>
                             </span>
                             <span>
-                                {restaurantDetails.avgPrice} <br /> AVERAGE COST FOR <br />TWO PEOPLE
+                                {restaurantDetails.avgPrice * 2} <br /> AVERAGE COST FOR <br />TWO PEOPLE
                         </span>
                         </div>
                     </header>
@@ -281,7 +281,7 @@ class Details extends Component {
                         <div className="menu-items">
                             {restaurantDetails.categories.map(category => (
                                 <div key={"categoryItems" + category.id}>
-                                    <h2>{category.categoryName}
+                                    <h2 className="category-name">{category.categoryName}
                                         <Divider />
                                     </h2>
                                     {category.items.map(item => (

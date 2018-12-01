@@ -50,7 +50,6 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            // restaurants: [],
             restaurants: [
                 {
                     "id": 1,
@@ -124,12 +123,11 @@ class Home extends Component {
     //     xhr.addEventListener("readystatechange", function () {
     //         if (this.readyState === 4) {
     //             that.setState({
-    //                 restaurantDetails: JSON.parse(this.responseText)
+    //                 restaurants: JSON.parse(this.responseText)
     //             });
     //         }
     //     });
-    //     {/**Extracted Dynamically passed restaurantId from params */ }
-    //     xhr.open("GET", this.props.baseUrl + "restaurant/" + this.props.match.params.restaurantId);
+    //     xhr.open("GET", this.props.baseUrl + "restaurant/");
     //     xhr.send();
     // }
 
@@ -157,7 +155,7 @@ class Home extends Component {
                                             <p>{restaurant.categories}</p>
                                             <div>
                                                 <span className="rating">{restaurant.userRating} ({restaurant.numberUsersRated})</span>
-                                                <span>{restaurant.avgPrice} for two</span>
+                                                <span>{restaurant.avgPrice * 2} for two</span>
                                             </div>
                                         </Typography>
                                     </CardContent>
