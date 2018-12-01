@@ -2,14 +2,16 @@ import { Button } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Add from '@material-ui/icons/Add';
+import Remove from '@material-ui/icons/Remove';
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Details.css';
-import Add from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
     snackbar: {
@@ -165,9 +167,11 @@ class Details extends Component {
     //     xhr.send();
     // }
 
-    addMenuItemClickHandler = () => {
-
-    }
+    addMenuItemClickHandler = (item) => {
+        let newCartItems = this.state.cartItems;
+        newCartItems.push(item);
+        // this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
+    };
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
@@ -179,7 +183,6 @@ class Details extends Component {
     };
 
     render() {
-        const { vertical, horizontal, open } = this.state;
         let restaurantDetails = this.state.restaurantDetails;
         return (
             <div>
@@ -227,7 +230,7 @@ class Details extends Component {
                                                     key="close"
                                                     aria-label="Close"
                                                     color="inherit"
-                                                    onClick={this.addMenuItemClickHandler}>
+                                                    onClick={this.addMenuItemClickHandler(item)}>
                                                     <Add />
                                                 </IconButton></span>
                                         </div>
@@ -239,16 +242,44 @@ class Details extends Component {
                             <Card>
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        My Cart
+                                        <ShoppingCart />My Cart
                                     </Typography>
+                                    {this.state.cartItems.map(item => (
+                                        <div key={"item" + item.id}>
+                                            <span>{item.type}</span>
+                                            <span>{item.itemName}</span>
+                                            <span>
+                                                <IconButton
+                                                    key="close"
+                                                    aria-label="Close"
+                                                    color="inherit"
+                                                    onClick={this.addMenuItemClickHandler}>
+                                                    <Remove />
+                                                </IconButton>
+                                            </span>
+                                            <span>
+                                                <IconButton
+                                                    key="close"
+                                                    aria-label="Close"
+                                                    color="inherit"
+                                                    onClick={this.addMenuItemClickHandler}>
+                                                    <Add />
+                                                </IconButton>
+                                            </span>
+                                            <span>{item.price}</span>
+                                        </div>
+                                    ))}
                                     TOTAL AMOUNT
                                 <Button variant="contained" color="primary"
                                         onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>
                                         CHECKOUT
                                 </Button>
                                     <Snackbar
-                                        anchorOrigin={{ vertical, horizontal }}
-                                        open={open}
+                                        anchorOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        }}
+                                        open={this.state.open}
                                         onClose={this.handleClose}
                                         ContentProps={{
                                             'aria-describedby': 'message-id',
