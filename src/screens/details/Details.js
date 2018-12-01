@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
@@ -16,6 +17,9 @@ import './Details.css';
 const styles = theme => ({
     snackbar: {
         margin: theme.spacing.unit,
+    },
+    margin: {
+        margin: theme.spacing.unit * -0.25,
     },
 });
 
@@ -170,7 +174,18 @@ class Details extends Component {
     addMenuItemClickHandler = (item) => {
         let newCartItems = this.state.cartItems;
         newCartItems.push(item);
-        // this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
+        this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
+    };
+
+    removeCartItemClickHandler = (item) => {
+        let newCartItems = this.state.cartItems;
+        for (var i = 0; i < newCartItems.length - 1; i++) {
+            if (newCartItems[i].id === item.id) {
+                newCartItems.splice(i, 1);
+            }
+        }
+        console.log("newCartItems[i].id = " + newCartItems[i].id + "item.id =" + item.id + "newCartItems = " + newCartItems);
+        this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
     };
 
     onClickCheckoutButton = state => () => {
@@ -183,6 +198,7 @@ class Details extends Component {
     };
 
     render() {
+        const { classes } = this.props;
         let restaurantDetails = this.state.restaurantDetails;
         return (
             <div>
@@ -222,7 +238,11 @@ class Details extends Component {
                                     </h2>
                                     {category.items.map(item => (
                                         <div key={"item" + item.id}>
-                                            <span>{item.type}</span>
+                                            <span>{item.type == 'Veg' &&
+                                                <i class="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
+                                                {item.type == 'Non-Veg' &&
+                                                    <i class="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
+                                            </span>
                                             <span>{item.itemName}</span>
                                             <span>{item.price}</span>
                                             <span>
@@ -230,7 +250,7 @@ class Details extends Component {
                                                     key="close"
                                                     aria-label="Close"
                                                     color="inherit"
-                                                    onClick={this.addMenuItemClickHandler(item)}>
+                                                    onClick={() => this.addMenuItemClickHandler(item)}>
                                                     <Add />
                                                 </IconButton></span>
                                         </div>
@@ -242,18 +262,25 @@ class Details extends Component {
                             <Card>
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        <ShoppingCart />My Cart
+                                        <Badge badgeContent={this.state.cartItems.length} color="primary" classes={{ badge: classes.margin }}>
+                                            <ShoppingCart />
+                                        </Badge>
+                                        My Cart
                                     </Typography>
                                     {this.state.cartItems.map(item => (
                                         <div key={"item" + item.id}>
-                                            <span>{item.type}</span>
+                                            <span>{item.type == 'Veg' &&
+                                                <i class="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
+                                                {item.type == 'Non-Veg' &&
+                                                    <i class="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
+                                            </span>
                                             <span>{item.itemName}</span>
                                             <span>
                                                 <IconButton
                                                     key="close"
                                                     aria-label="Close"
                                                     color="inherit"
-                                                    onClick={this.addMenuItemClickHandler}>
+                                                    onClick={() => this.removeCartItemClickHandler(item)}>
                                                     <Remove />
                                                 </IconButton>
                                             </span>
@@ -262,7 +289,7 @@ class Details extends Component {
                                                     key="close"
                                                     aria-label="Close"
                                                     color="inherit"
-                                                    onClick={this.addMenuItemClickHandler}>
+                                                    onClick={() => this.addCartItemClickHandler(item)}>
                                                     <Add />
                                                 </IconButton>
                                             </span>
@@ -270,10 +297,11 @@ class Details extends Component {
                                         </div>
                                     ))}
                                     TOTAL AMOUNT
-                                <Button variant="contained" color="primary"
+                                    <br />
+                                    <Button variant="contained" color="primary"
                                         onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>
                                         CHECKOUT
-                                </Button>
+                                    </Button>
                                     <Snackbar
                                         anchorOrigin={{
                                             vertical: 'bottom',

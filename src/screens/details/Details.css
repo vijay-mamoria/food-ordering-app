@@ -26,6 +26,16 @@
     text-transform: uppercase;
 }
 
+.veg-item-color{
+ color: green;
+}
+
+.non-veg-item-color{
+    color: red;
+}
+
+
 .my-cart{
     margin: 30px 60px auto auto;
+    width: 400px;
 }
