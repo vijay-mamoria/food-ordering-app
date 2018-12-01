@@ -1,7 +1,6 @@
 import { Button } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import Divider from '@material-ui/core/Divider';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import './Details.css';
+import Add from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
     snackbar: {
@@ -142,78 +143,6 @@ class Details extends Component {
                                 "type": "Veg"
                             }
                         ]
-                    },
-                    {
-                        "id": 1,
-                        "categoryName": "Italian",
-                        "items": [
-                            {
-                                "id": 1,
-                                "itemName": "pizza",
-                                "price": 200,
-                                "type": "Non-Veg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": 7,
-                        "categoryName": "Rice",
-                        "items": [
-                            {
-                                "id": 27,
-                                "itemName": "fried rice",
-                                "price": 206,
-                                "type": "Veg"
-                            },
-                            {
-                                "id": 29,
-                                "itemName": "veg biryani",
-                                "price": 203,
-                                "type": "Veg"
-                            },
-                            {
-                                "id": 30,
-                                "itemName": "chicken biryani",
-                                "price": 245,
-                                "type": "Non-Veg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": 3,
-                        "categoryName": "Snacks",
-                        "items": [
-                            {
-                                "id": 13,
-                                "itemName": "pastry",
-                                "price": 210,
-                                "type": "Veg"
-                            },
-                            {
-                                "id": 15,
-                                "itemName": "macroni",
-                                "price": 130,
-                                "type": "Veg"
-                            }
-                        ]
-                    },
-                    {
-                        "id": 5,
-                        "categoryName": "Sweet Dish",
-                        "items": [
-                            {
-                                "id": 13,
-                                "itemName": "pastry",
-                                "price": 210,
-                                "type": "Veg"
-                            },
-                            {
-                                "id": 8,
-                                "itemName": "hot chocolate",
-                                "price": 250,
-                                "type": "Veg"
-                            }
-                        ]
                     }
                 ]
             }
@@ -236,6 +165,10 @@ class Details extends Component {
     //     xhr.send();
     // }
 
+    addMenuItemClickHandler = () => {
+
+    }
+
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
         this.props.history.push("/checkout");
@@ -246,38 +179,38 @@ class Details extends Component {
     };
 
     render() {
-        const { classes } = this.props;
         const { vertical, horizontal, open } = this.state;
         let restaurantDetails = this.state.restaurantDetails;
         return (
             <div>
                 <Header />
                 <div>
-                    <header className="details-header-bg">
-                        <div>
-                            <span>
-                                <img className="restaurant-image" src={restaurantDetails.photoUrl} alt="RestaurantImage" />
-                            </span>
-                            <span>
-                                {/**For adjacent state fields need to wrap them in some parent component */}
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    {restaurantDetails.restaurantName}
-                                </Typography>
-                                <Typography>{restaurantDetails.address.locality}</Typography>
-                                <Typography>
-                                    {restaurantDetails.categories.map(category => (
-                                        <span key={"category" + category.id}>{category.categoryName}, </span>
-                                    ))}
-                                </Typography>
-                                <Typography>{restaurantDetails.userRating}</Typography>
-                                <Typography>AVERAGE RATING BY <br />{restaurantDetails.numberUsersRated} USERS</Typography>
-                            </span>
-                            <span>
-                                {restaurantDetails.avgPrice * 2} <br /> AVERAGE COST FOR <br />TWO PEOPLE
+                    <div className="details-header-bg">
+                        <span>
+                            <img className="restaurant-image" src={restaurantDetails.photoUrl} alt="RestaurantImage" />
                         </span>
-                        </div>
-                    </header>
-                    <div>
+                        <span>
+                            {/**For adjacent state fields need to wrap them in some parent component */}
+                            <Typography gutterBottom variant="h5" component="h2">
+                                {restaurantDetails.restaurantName}
+                            </Typography>
+                            <br />
+                            <Typography>{restaurantDetails.address.locality}</Typography>
+                            <br />
+                            <Typography>
+                                {restaurantDetails.categories.map(category => (
+                                    <span key={"category" + category.id}>{category.categoryName}, </span>
+                                ))}
+                            </Typography>
+                            <br />
+                            <Typography>{restaurantDetails.userRating}</Typography>
+                            <Typography>AVERAGE RATING BY <br />{restaurantDetails.numberUsersRated} USERS</Typography>
+                        </span>
+                        <span>
+                            {restaurantDetails.avgPrice * 2} <br /> AVERAGE COST FOR <br />TWO PEOPLE
+                        </span>
+                    </div>
+                    <div className="menu-cart-items">
                         <div className="menu-items">
                             {restaurantDetails.categories.map(category => (
                                 <div key={"categoryItems" + category.id}>
@@ -289,12 +222,20 @@ class Details extends Component {
                                             <span>{item.type}</span>
                                             <span>{item.itemName}</span>
                                             <span>{item.price}</span>
+                                            <span>
+                                                <IconButton
+                                                    key="close"
+                                                    aria-label="Close"
+                                                    color="inherit"
+                                                    onClick={this.addMenuItemClickHandler}>
+                                                    <Add />
+                                                </IconButton></span>
                                         </div>
                                     ))}
                                 </div>
                             ))}
                         </div>
-                        <div className="myCart">
+                        <div className="my-cart">
                             <Card>
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h2">
