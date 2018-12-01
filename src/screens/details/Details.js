@@ -34,6 +34,7 @@ class Details extends Component {
             horizontal: 'center',
             cartNotificationMessage: '',
             cartItems: [],
+            totalCartItemsValue: 0,
             // restaurantDetails: '',
             restaurantDetails: {
                 "id": 1,
@@ -172,20 +173,56 @@ class Details extends Component {
     // }
 
     addMenuItemClickHandler = (item) => {
+        //set new attribute quantity for the cart
         let newCartItems = this.state.cartItems;
-        newCartItems.push(item);
+        let itemAlreadyAdded = false;
+        if (newCartItems != null) {
+            for (var i = 0; i < newCartItems.length; i++) {
+                if (newCartItems[i].id === item.id) {
+                    item.quantity = item.quantity + 1;
+                    itemAlreadyAdded = true;
+                    break;
+                }
+            }
+        }
+        if (!itemAlreadyAdded) {
+            item.quantity = 1;
+            newCartItems.push(item);
+        }
         this.setState({ cartItems: newCartItems, open: true, cartNotificationMessage: 'Item added to cart!' });
+        this.updateTotalCartItemsValue(true, item.price);
+    };
+
+    addCartItemClickHandler = (item) => {
+        item.quantity = item.quantity + 1;
+        this.setState({ open: true, cartNotificationMessage: 'Item quantity increased by 1!' });
+        this.updateTotalCartItemsValue(true, item.price);
     };
 
     removeCartItemClickHandler = (item) => {
-        var removeCartItems = this.state.cartItems;
+        let removeCartItems = this.state.cartItems;
         for (var i = 0; i < removeCartItems.length; i++) {
             if (removeCartItems[i].id === item.id) {
-                removeCartItems.splice(i, 1);
+                if (item.quantity > 1) {
+                    item.quantity = item.quantity - 1;
+                } else {
+                    removeCartItems.splice(i, 1);
+                }
             }
         }
         this.setState({ cartItems: removeCartItems, open: true, cartNotificationMessage: 'Item quantity decreased by 1!' });
+        this.updateTotalCartItemsValue(false, item.price);
     };
+
+    updateTotalCartItemsValue(isAdded, price) {
+        let newTotalCartItemsValue = this.state.totalCartItemsValue;
+        if (isAdded) {
+            newTotalCartItemsValue = newTotalCartItemsValue + price;
+        } else {
+            newTotalCartItemsValue = newTotalCartItemsValue - price;
+        }
+        this.setState({ totalCartItemsValue: newTotalCartItemsValue });
+    }
 
     onClickCheckoutButton = state => () => {
         this.setState({ open: true, ...state });
@@ -238,9 +275,9 @@ class Details extends Component {
                                     {category.items.map(item => (
                                         <div key={"item" + item.id}>
                                             <span>{item.type == 'Veg' &&
-                                                <i class="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
+                                                <i className="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
                                                 {item.type == 'Non-Veg' &&
-                                                    <i class="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
+                                                    <i className="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
                                             </span>
                                             <span>{item.itemName}</span>
                                             <span>{item.price}</span>
@@ -269,9 +306,9 @@ class Details extends Component {
                                     {this.state.cartItems.map(item => (
                                         <div key={"item" + item.id}>
                                             <span>{item.type == 'Veg' &&
-                                                <i class="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
+                                                <i className="fa fa-stop-circle-o veg-item-color" aria-hidden="true"></i>}
                                                 {item.type == 'Non-Veg' &&
-                                                    <i class="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
+                                                    <i className="fa fa-stop-circle-o non-veg-item-color" aria-hidden="true"></i>}
                                             </span>
                                             <span>{item.itemName}</span>
                                             <span>
@@ -283,6 +320,7 @@ class Details extends Component {
                                                     <Remove />
                                                 </IconButton>
                                             </span>
+                                            <span>{item.quantity}</span>
                                             <span>
                                                 <IconButton
                                                     key="close"
@@ -295,7 +333,7 @@ class Details extends Component {
                                             <span>{item.price}</span>
                                         </div>
                                     ))}
-                                    TOTAL AMOUNT
+                                    TOTAL AMOUNT {this.state.totalCartItemsValue}
                                     <br />
                                     <Button variant="contained" color="primary"
                                         onClick={this.onClickCheckoutButton({ vertical: 'bottom', horizontal: 'left' })}>
