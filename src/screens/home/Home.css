@@ -6,6 +6,7 @@
 
 .image-post {
     margin:10px;
+    cursor:pointer;
 }
 
 img {
@@ -24,4 +25,13 @@ img {
 .rating{
     background-color: #CCCC00;
     color: white;
+    float:left;
+
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+

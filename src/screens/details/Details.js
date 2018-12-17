@@ -245,7 +245,10 @@ class Details extends Component {
         let restaurantDetails = this.state.restaurantDetails;
         return (
             <div>
-                <Header />
+                <Header 
+                showSearchBox={false}
+                showCategories={false}
+                />
                 <div>
                     <div className="details-header-bg">
                         <span>
