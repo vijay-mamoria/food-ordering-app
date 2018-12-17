@@ -94,6 +94,10 @@ class Header extends Component {
             errorResp: "disp-none",
             errorResponse: "",
         }
+
+        if (sessionStorage.getItem('access-token') != null) {
+            this.state = {loggedIn:true, loggedInName: sessionStorage.getItem('loggedInName')}
+          }
     }
 
     inputSearchChangeHandler = (e) => {
@@ -160,9 +164,11 @@ class Header extends Component {
      */
     logoutClickHandler = () => {
         sessionStorage.removeItem("access-token");
+        sessionStorage.removeItem('loggedInName');
         this.setState({
             loggedIn: false,
             openMenu: false,
+            loggedInName: "LOGIN",
         });
     }
 
@@ -228,6 +234,8 @@ class Header extends Component {
                     return;
                 }
                 sessionStorage.setItem("access-token", xhrLogin.getResponseHeader("access-token"));
+                sessionStorage.setItem("loggedInName", JSON.parse(this.responseText).firstName);
+
 
                 console.log(this.responseText);
                 that.setState({
@@ -236,8 +244,10 @@ class Header extends Component {
                     showSnackBarMsg: true,
                     snackBarMsg: "Logged in successfully!",
                     loggedInName: JSON.parse(this.responseText).firstName
+                    
                 });
-
+                
+                //sessionStorage.setItem("loggedInUserName", this.state.loggedInName);
                 that.closeModalHandler();
             }
             else {
