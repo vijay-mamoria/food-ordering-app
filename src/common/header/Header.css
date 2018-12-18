@@ -4,33 +4,86 @@
     background-color: #A9A9A9;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    position: relative;
+   
+ 
 }
 
 .header-logo {
-    padding: 10px;
     font-size: 20px;
     color: #fff;
+    float:left;
+    align-self: center;
+    display: flex;
+    width:100px;
+    padding: 10px;
+    justify-content: space-between;
+
 }
 
-.right{
-    float: right;
-}
+.user-profile-drop-down {
+    position: absolute;
+    right: 16px;
+    background: #dfdfdf;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 30px;
+    display: block;
+    z-index: 1;
+  }
+
+  .my-account-dropdown-menu-item, .logout-dropdown-menu-item {
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+  }
 
 .searchIcon{
     color: white;
+    padding: 0 7px;
+    align-self: center;
+}
+
+#search{
+    width:250px;
+    padding-left: 7px;
+
 }
 
 .searchBox{
-    border-radius: 4px;
     width: 300px;
-    background-color: #c0c0c0;
-    align-items: center;
-    float: left;
+   display: flex;
+  background: #c0c0c0;
+  height: 50%;
+  align-self: center;
+  display: flex;
+
+   
 }
 
-.profile-picture{
+.formatListIcon{
+    align-self: center;
+
+}
+
+.categories{
+    align-self: center;
+    cursor:pointer;
+    display: flex;
+
+}
+
+.categoryLabel{
+    align-self: center;
+    position: absolute;
+}
+
+.login{
     border-radius: 4px;
-    float: right;
+    align-self: center;
+    display: flex;
+    margin-right:7px;
 }
 
 .tabs {
@@ -39,14 +92,35 @@
 
 .disp-none{
     display: none;
+    background-color:transparent;
 }
-
 .disp-block{
     display: block;
-    border-radius: 4px;
-    background-color: #A9A9A9;
+    background-color:transparent;
 }
 
 .red {
     color: red;
 }
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+@media (max-width: 992px) {
+  
+  .header-bg {
+    height: 150px;
+    width:350px;
+   position: relative;
+    flex-direction: column;
+    display: block;
+    justify-content: space-evenly;
+  }
+  
+} 

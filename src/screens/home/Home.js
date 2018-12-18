@@ -4,13 +4,19 @@ import CardContent from '@material-ui/core/CardContent';
 import GridList from '@material-ui/core/GridList';
 import { withStyles } from '@material-ui/core/styles';
 import React, { Component } from 'react';
+import FontAwesome from 'react-fontawesome';
 import Header from '../../common/header/Header';
 import './Home.css';
 
 const styles = theme => ({
     root: {
         flexGrow: 1,
+        overflow: 'hidden',
         backgroundColor: theme.palette.background.paper
+    },
+    gridList: {
+        width: 500,
+        height: 450,
     },
     gridListMain: {
         transform: 'translateZ(0)',
@@ -45,106 +51,74 @@ const styles = theme => ({
     },
 });
 
+
 class Home extends Component {
 
     constructor() {
         super();
         this.state = {
-            restaurants: [
-                {
-                    "id": 1,
-                    "restaurantName": "Dominoz",
-                    "photoUrl": "https://b.zmtcdn.com/data/pictures/4/18528394/6c3590212b3700b1b160422fd8478287.jpg?output-format=webp",
-                    "userRating": 4.2,
-                    "avgPrice": 250,
-                    "numberUsersRated": 99,
-                    "address": {
-                        "id": 1,
-                        "flatBuilNo": "501/31 Mahalaxmi SRA CHS",
-                        "locality": "Prabhadevi",
-                        "city": "Mumbai",
-                        "zipcode": "400015",
-                        "state": {
-                            "id": 21,
-                            "stateName": "Maharashtra"
-                        }
-                    },
-                    "categories": "Chinese, Drinks, Indian, Italian, Rice, Snacks, Sweet Dish"
-                },
-                {
-                    "id": 2,
-                    "restaurantName": "KFC",
-                    "photoUrl": "https://b.zmtcdn.com/data/pictures/4/18528394/6c3590212b3700b1b160422fd8478287.jpg?output-format=webp",
-                    "userRating": 3.60392156862745,
-                    "avgPrice": 200,
-                    "numberUsersRated": 102,
-                    "address": {
-                        "id": 2,
-                        "flatBuilNo": "202/C,Road No.-33, Adarsh Nagar",
-                        "locality": "Prabhadevi",
-                        "city": "Mumbai",
-                        "zipcode": "400015",
-                        "state": {
-                            "id": 21,
-                            "stateName": "Maharashtra"
-                        }
-                    },
-                    "categories": "Chinese, Drinks, Indian, Italian, Rice, Snacks, Sweet Dish"
-                },
-                {
-                    "id": 3,
-                    "restaurantName": "Trump",
-                    "photoUrl": "https://b.zmtcdn.com/data/pictures/4/18528394/6c3590212b3700b1b160422fd8478287.jpg?output-format=webp",
-                    "userRating": 1.1,
-                    "avgPrice": 450,
-                    "numberUsersRated": 467,
-                    "address": {
-                        "id": 3,
-                        "flatBuilNo": "502/32",
-                        "locality": "Prabhadevi",
-                        "city": "Mumbai",
-                        "zipcode": "400015",
-                        "state": {
-                            "id": 21,
-                            "stateName": "Maharashtra"
-                        }
-                    },
-                    "categories": "Drinks"
-                }
-            ]
+            restaurants: [],
+            filteredRestaurantList: []
         }
     }
 
     //Using Fetch with async and await to get json data
-    // componentWillMount() {
-    //     {/**API to fetch restaurant Details*/ }
-    //     let xhr = new XMLHttpRequest();
-    //     let that = this;
-    //     xhr.addEventListener("readystatechange", function () {
-    //         if (this.readyState === 4) {
-    //             that.setState({
-    //                 restaurants: JSON.parse(this.responseText)
-    //             });
-    //         }
-    //     });
-    //     xhr.open("GET", this.props.baseUrl + "restaurant/");
-    //     xhr.send();
-    // }
+    async componentDidMount() {
+        console.log( "BASEURL: " + this.props.baseUrl)
+        const response = await fetch(this.props.baseUrl+'restaurant');
+        const json = await response.json();
+        this.setState({ restaurants: json });
+        this.setState({ filteredRestaurantList: json });
+
+
+    }
+
 
     showRestaurantDetails = (restaurantId) => {
         this.props.history.push("/restaurant/" + restaurantId);
+    }
+
+    searchText = (value) => {
+        if (value === "") {
+            this.setState({
+                filteredRestaurantList: this.state.restaurants
+            })
+        }
+        else {
+
+            let xhr = new XMLHttpRequest();
+            let that = this;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4 && xhr.status === 200) {
+                    that.setState({
+                        filteredRestaurantList: JSON.parse(this.responseText)
+                    });
+                }
+                else {
+                    that.setState({
+                        filteredRestaurantList: []
+                    });
+                }
+            });
+            xhr.open("GET", this.props.baseUrl+"restaurant/name/" + value);
+            xhr.send();
+
+        }
     }
 
     render() {
         const { classes } = this.props;
         return (
             <div>
-                <Header />
+                <Header searchHandler={this.searchText}
+                 showSearchBox={true}
+                 showCategories={true}
+                 />
                 <div className="main-body-container">
                     <GridList cellHeight={"auto"} className={classes.gridListMain} cols={3}>
                         {/**Check implementation of onClick for GridListTile. If we directly write method name then it executes immediately*/}
-                        {this.state.restaurants.map(restaurant => (
-                            <GridListTile onClick={() => this.showRestaurantDetails(restaurant.id)}>
+                        {this.state.filteredRestaurantList.map(restaurant => (
+                            <GridListTile key={restaurant.id} onClick={() => this.showRestaurantDetails(restaurant.id)}>
                                 <Card key={restaurant.id} className="image-post">
                                     <CardContent>
                                         <img src={restaurant.photoUrl} alt="RestaurantImage" />
@@ -153,9 +127,10 @@ class Home extends Component {
                                                 {restaurant.restaurantName}
                                             </Typography>
                                             <p>{restaurant.categories}</p>
-                                            <div>
-                                                <span className="rating">{restaurant.userRating} ({restaurant.numberUsersRated})</span>
-                                                <span>{restaurant.avgPrice * 2} for two</span>
+                                            <div >
+                                                <span className="rating" style={{ paddingLeft: '5px' }}><FontAwesome name='star' /></span>
+                                                <span className="rating" style={{ paddingLeft: '5px' }}>{restaurant.userRating} ({restaurant.numberUsersRated})</span>
+                                                <span style={{ float: 'right' }}><FontAwesome name='inr' />{restaurant.avgPrice} for two</span>
                                             </div>
                                         </Typography>
                                     </CardContent>
